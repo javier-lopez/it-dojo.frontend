@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% include "user_modal.html" %}
+<div class="container">
+    <div class="row main">
+      <table class="col-md-offset-1">
+          <tr valign="top">
+              <td style="padding-right: 40px;"><img src="{{user.avatar(128)}}"></td>
+              <td>
+                <h1>Usuario: {{user.email}}</h1>
+                {% if user.last_seen %}<p><i>Último acceso: {{user.last_seen}}</i></p>{% endif %}
+                {% if user.id == current_user.id %}
+                <p>
+                  <a href="{{url_for('user_edit')}}">Editar</a>
+                  <a href="#" data-href="{{url_for('user_delete')}}" data-toggle="modal"
+                      data-target="#confirm-delete" class="text-danger">Eliminar cuenta</a>
+                </p>
+                {% endif %}
+              </td>
+          </tr>
+      </table>
+    </div>
+
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+            $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+        });
+    </script>
+</div>
+{% endblock %}

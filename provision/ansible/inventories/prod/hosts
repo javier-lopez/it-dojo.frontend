@@ -1,0 +1,9 @@
+[inventory:children]
+docker
+app
+
+[docker:children]
+app
+
+[app:children]
+167.99.169.15

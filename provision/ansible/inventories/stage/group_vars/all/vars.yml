@@ -1,0 +1,87 @@
+###########
+#   Meta  #
+###########
+play_common:          true
+play_load_balancer:   true
+play_docker:          true
+play_dockerized_api:  true
+play_post_deployment: true
+
+###########
+# General #
+###########
+env: stage
+domain: stage.it-dojo.io
+persistent_storage_path: /persistent_storage
+logs_path: "{{persistent_storage_path}}/logs"
+
+system_users:
+  - username: ansible
+    password: '{{vault_ansible_password}}' #openssl passwd -salt salt -1 'same'
+    groups: ['wheel']
+    shell: /bin/bash
+
+#proxy_host: proxy.it-dojo.io
+#proxy_port: 8080
+#http_proxy: http://{{vault_proxy_user}}:{{vault_proxy_password}}@{{proxy_host}}:{{proxy_port}}
+#no_proxy: localhost,*it-dojo.io
+
+##########
+# Docker #
+##########
+docker_edition: 'ce' #Community Edition or 'ee' for Enterprise Edition
+docker_repo_url: 'https://download.docker.com/linux/centos/docker-{{docker_edition}}.repo'
+docker_gpg_key_url: 'https://download.docker.com/linux/centos/gpg'
+docker_version: 17.09.0
+docker_py_version: 2.5.1
+
+docker_daemon_tcp_port: 2375
+docker_daemon_memory_maxpct: 90
+docker_daemon_CPU_maxpct: 90
+docker_restart_policy_retry: 5
+docker_containers_log_path: "{{logs_path}}/docker/containers"
+docker_containers_volume_path: "{{persistent_storage_path}}/volumes/docker/containers"
+docker_registries:
+  - "registry.it-dojo.io"
+
+docker_admin_users:
+  - "{{ansible_user}}"
+
+#https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
+#docker_storage_driver:  'overlay'
+docker_storage_driver: 'overlay2'
+#docker_storage_driver: 'devicemapper'
+
+#only evaluated when docker_storage_driver == devicemapper
+docker_volume_disks:           #optional
+  - /dev/sdb
+  - /dev/sdc
+  - /dev/sdd
+docker_volume_group: vg_docker #required
+
+##################
+# Docker compose #
+##################
+docker_compose_version: 1.19.0
+docker_compose_path: /etc/docker/compose
+
+##########################
+# Dockerized: app        #
+##########################
+app_tcp_port: 9090
+app_image: 'registry.{{domain}}/it-dojo-app:latest'
+app_subdomains: ['app']
+app_mode: ['global']
+
+##############
+#  HAProxy   #
+##############
+haproxy_frontend_tcp_port: 80
+haproxy_frontend_tls_tcp_port: 443 #only applied when haproxy_https == true
+haproxy_backend_tcp_port: "5000"
+haproxy_log_path: "{{logs_path}}/haproxy/haproxy.log"
+haproxy_support_url: "https://it-dojo.io/help"
+haproxy_support_msg: "My Company Support"
+haproxy_maxconn: 2048
+haproxy_https: true
+haproxy_redirect_https: false

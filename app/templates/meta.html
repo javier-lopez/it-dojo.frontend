@@ -1,0 +1,33 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content=""      name="description" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<link rel="shortcut icon" href="/static/images/favicon.ico">
+
+{% if title == "Schedule Interview" or title == "tst" %}
+<link href="/static/plugins/timepicker/bootstrap-timepicker.min.css"                rel="stylesheet">
+<link href="/static/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css"  rel="stylesheet">
+{% endif %}
+
+{% if title == "Dashboard" or title == "tst" %}
+<!--Morris Chart CSS -->
+<link href="/static/plugins/morris/morris.css"                      rel="stylesheet" >
+<link href="/static/plugins/fullcalendar/css/fullcalendar.min.css"  rel="stylesheet" />
+{% endif %}
+
+{% if title == "Scores" or title == "Dashboard" or title == "tst" %}
+<!-- DataTables -->
+<link href="/static/plugins/datatables/jquery.dataTables.min.css"      rel="stylesheet" type="text/css" />
+<link href="/static/plugins/datatables/buttons.bootstrap.min.css"      rel="stylesheet" type="text/css" />
+<link href="/static/plugins/datatables/fixedHeader.bootstrap.min.css"  rel="stylesheet" type="text/css" />
+<link href="/static/plugins/datatables/responsive.bootstrap.min.css"   rel="stylesheet" type="text/css" />
+<link href="/static/plugins/datatables/dataTables.bootstrap.min.css"   rel="stylesheet" type="text/css"/>
+<link href="/static/plugins/datatables/scroller.bootstrap.min.css"     rel="stylesheet" type="text/css" />
+{% endif %}
+
+{# needed at end #}
+<link href="/static/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
+<link href="/static/css/icons.css"          rel="stylesheet" type="text/css">
+<link href="/static/css/style.css"          rel="stylesheet" type="text/css">
+{% block metarefresh %} {% endblock %}

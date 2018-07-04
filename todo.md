@@ -1,0 +1,11 @@
+- integrate terminal
+- definir endpoints
+    - login
+    - dashboard => catalog
+    - dashboard (create)
+        - points, statistics
+        - courses
+    - courses (delete from navbar, should be accesible from the dashboard)
+        - xterm
+
+- check https://www.katacoda.com/embed out

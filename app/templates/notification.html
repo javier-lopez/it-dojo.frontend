@@ -1,0 +1,22 @@
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+      <script type="text/javascript">
+      $(document).ready(function() {
+      {% for message in messages %}
+        $.bootstrapGrowl('{{message}}',
+            {
+              //ele: 'body',
+              type:   'info', // (null, 'info', 'danger', 'success')
+              offset: {from: 'top', amount: 40}, // 'top', or 'bottom'
+              align:  'left', // ('left', 'right', or 'center')
+              width:  'auto', // (integer, or 'auto')
+              delay:  4000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+              allow_dismiss: false, // If true then will display a cross to close the popup.
+              stackup_spacing: 10 // spacing between consecutively stacked growls.
+            }
+        );
+      {% endfor %}
+      });
+      </script>
+  {% endif %}
+{% endwith %}

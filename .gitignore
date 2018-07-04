@@ -1,0 +1,11 @@
+*.retry
+.DS_Store
+*.swp
+.vagrant/
+.vault_pass.txt
+*.pyc
+mongodb-data
+__pycache__
+.env
+.terraform
+*.tfstate

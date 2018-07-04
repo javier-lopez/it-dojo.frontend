@@ -1,0 +1,12 @@
+flask==0.12.2 #1.0 version is broken: https://github.com/pallets/flask/issues/2725
+markdown
+requests
+flask-wtf
+flask-login
+flask-bcrypt
+itsdangerous
+flask-mongoengine
+
+#bjoern
+flask-thumbnails
+flask-uploads

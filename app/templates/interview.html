@@ -1,0 +1,158 @@
+<html style="height:100%;width:100%;">
+  <head>
+    {% include "meta.html" %}
+  </head>
+
+  <body>
+    {% if obj["score"] != ""  %}
+    <script>
+    $(document).ready(function(){
+       $("#traceback").modal();
+    });
+    </script>
+    {% endif %} 
+
+    <div class="page" style="height:100%;width:100%;">
+      <div class="container" style="padding:2%;height:100%;width:100%;">
+        <div class="row-fixed">
+
+          <div class="col-sm-5 center-block">
+            <div class="panel panel-primary">
+
+              <div class="" style="padding: 2%;margin: 0%; height: 100%; width: 100%;margin-bottom: 0;" >
+
+                  <ul class="nav nav-tabs nav-justified" role="tablist" style="margin-top: 2em;position: inherit;right: 0%;" >
+                  {% for tab in range( 0, (obj["uri"])| length ) %}
+                  {% set active = "disable" %}
+
+                  {% if loop.first %}
+                    {% set active = "active" %}
+                  {% endif %}
+                    <li class="{{ active }}">
+                      <a href="step{{ tab }}" data-toggle="tab" aria-expanded="true" role="tab" style="background-color: transparent;">
+                        <span class="">
+                          <i class="glyphicon glyphicon-folder-open"></i>
+                        </span>
+                      </a>
+                    </li>
+                  {% endfor %} 
+
+                  </ul>
+
+              <!-- <h2 style="padding:2%;margin:0%;height:10%;width:100%;">Test Instruction:  </h2> -->
+                 <form method='POST' role="form">
+                  <div class="tab-content" style="margin-top: 6em;word-wrap:break-word;">
+                    {#  content body #}
+                    {% for tab in range( 0,(obj["uri"])| length ) %}
+                    {% set active = "disable" %}
+
+                    {% if loop.first %}
+                      {% set active = "active" %}
+                    {% endif %}
+                    <div class="tab-pane {{ active }}" role="tabpanel" id="step{{ obj.current|int }}">
+                      {{ obj.readme[obj.current] | safe }}
+                      <!--<p>This is step 3</p>-->
+                      <ul class="list-inline pull-right" style="margin-top: 3em;">
+                        {% if obj.current == 0 %}
+                          {% set disabled = "disabled" %}
+                        {% else%}
+                          {% set disabled = "" %}
+                        {% endif %}
+                        <li><button type="submit" name="minus" value="-" class="btn btn-primary prev-step {{ disabled }}">Previous</button></li>
+                        <li><button type="submit" name="test" value="test" class="btn btn-default">Test</button></li>
+
+                        {% if obj.current == (obj.uri | length)-1 %}
+                        {# <li><button class="btn btn-sucess waves-effect waves-light" id="sa-success">savesss</button></li> #}
+                        <li><button type="button" name="save" value="save" class="btn btn-success btn-info-full" data-toggle="modal" data-target="#save" >save</button></li>
+                        {% else %}
+                        <li><button type="submit" name="plus" value="+" class="btn btn-success btn-info-full next-step" >continue</button></li>
+                        {% endif %}
+
+                      </ul>
+
+                    </div>
+                    {% endfor %}
+
+                  </div>
+
+                </form>
+
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-sm-7"> {# start terminal #}
+            <div class="w-100 panel">
+              <iframe src="http://{{ obj.uri[obj.current]["tty"] | safe }}" style="max-width:100%;height:100%;width:100%;"></iframe>
+              <!-- <img src="/static/images/term.png" style="max-width:100%;height:100%;width:100%;" > -->
+            </div>
+          </div> {# end terminal#}
+
+
+        </div>  {# row #}
+
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="save">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            <h1>Congratulations !<h1>
+            <h2>you will recieve an email with your score</h2>
+          </div>
+
+        <form method='POST' role="form">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+            <button name="save" value="save" type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+    <div class="modal fade" id="traceback">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Modal title</h4>
+          </div>
+          <div class="modal-body">
+              {{ obj["score"] |safe }}
+          </div>
+
+        <form method='POST' role="form">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+            <button name="save" value="save" type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+
+
+  {% include "js.html" %}
+  </body>
+</html>

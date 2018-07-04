@@ -1,0 +1,44 @@
+- name: create compose config folder
+  file: path={{docker_compose_path}}/app mode=0755 state=directory owner=docker group=docker
+
+- name: upload files
+  copy: src={{item}} dest="{{docker_containers_volume_path}}/app/"
+  with_fileglob:
+    - files/*
+    - files/.env
+
+- name: upload directories
+  synchronize: src={{item}} dest="{{docker_containers_volume_path}}/app" delete=yes recursive=yes copy_links=yes
+  with_items:
+    - app
+    - nginx
+
+- name: create service docker volume directories
+  file: path={{docker_containers_volume_path}}/app/ state=directory
+  with_items:
+    - app/mongodb-data
+
+- name: build app stack
+  shell: |
+    export TMPDIR=$HOME
+    echo $TMPDIR
+    cd {{docker_containers_volume_path}}/app && \
+    docker-compose rm -f && \
+    find .  -maxdepth 2 -iname "__pycache__" -exec rm -fr {} \; && \
+    docker images | grep -i none | awk '{print $3}' | xargs -I{} docker rmi -f {} 2>&- || \
+    docker-compose rm -f && \
+    find .  -maxdepth 2 -iname "__pycache__" -exec rm -fr {} \; && \
+    docker images | grep -i none | awk '{print $3}' | xargs -I{} docker rmi -f {} 2>&-
+
+    docker-compose build
+  register: app_built
+
+- debug: var=app_built
+
+- name: deploy app stack
+  shell: |
+    cd {{docker_containers_volume_path}}/app && \
+    docker-compose up -d
+  register: app_exec
+
+- debug: var=app_exec

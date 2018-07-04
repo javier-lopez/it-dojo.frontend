@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <section>
+            <div class="wizard">
+                {# ______________________________[ LINE MENU ]  #}
+                <div class="wizard-inner">
+                    <div class="connecting-line"></div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
+                                <span class="round-tab">
+                                    <i class="glyphicon glyphicon-folder-open"></i>
+                                </span>
+                            </a>
+                        </li>
+
+                        <li role="presentation" class="disabled">
+                            <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
+                                <span class="round-tab">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </span>
+                            </a>
+                        </li>
+
+                        <li role="presentation" class="disabled">
+                            <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete">
+                                <span class="round-tab">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {# main selection #}
+                {#_______________________________[ IMAGE SELECTION ] #}
+
+                <form role="form" method=POST action="{{url_for('schedule_interview')}}" >
+                    {{ form.csrf_token }}
+                    <div class="tab-content">
+
+                        {# Workshop selection ______________[ STEP1 ] #}
+                         <div class="tab-pane active" role="tabpnel" id="step1">
+
+                            <h2 style="text-align:center;margin-top:-2%;padding-bottom:2%;"> Select field  </h2>
+
+                            {% for name,img in ("DevOps","skill1"),("Big Data","skill3"),("Web Dev","skill2") %}
+                            <div class="col-md-4 center-block next-step hov" id="{{ name }}_field">
+
+                                     <div class="card card-center" style="width: 30rem;box-shadow: 1px 1px 9px 0px black;">
+                                         <img class="card-img-top" src="/static/images/img/{{ img }}.png" style="max-width: 100%;" >
+                                         <div class="card-block" style="background:white;padding:10%;" >
+
+                                            {# {{ form.field( type="radio" , name="radio" , value="{{ name }}" , class="btn btn-group" , id="{{ name }}" ) }} #}
+                                            <input type="radio" name="field" value="{{ name }}" class="btn btn-group" style="visibility:hidden;" ></input>
+                                            <h2 class="card-title" style="color:#323c48" >{{ name }}</h2>
+                                            <p class="card-text">TYPE description</p>
+                                        </div>
+                                    </div>
+
+                            </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        {# form ____________________________[ STEP2 ] #}
+                        <div class="tab-pane" role="tab panel" id="step2">
+
+                            <div class="col-sm-12 col-sm-offset-2" style="width: 70%;">
+                                <div class="panel panel-primary">
+                                    <div class="panel-body" style="width: 100%;text-align:right;margin: 0%;font-size: 90%;line-height: 250%;">
+                                        <!-- form class="form-horizontal" -->
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Position</label>
+                                                <div class="col-md-10">
+                                                    {{ form.project(class="form-control" ,placeholder="Project Name", id="position_form" ) }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"> Seniority </label>
+                                                <div class="col-sm-10">
+                                                    {{ form.seniority(class="form-control") }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Applicant Name</label>
+                                                <div class="col-md-10">
+                                                    {{ form.name(class="form-control" ,placeholder="Applicant Name", id="name_form" ) }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" for="email">Applicant Email</label>
+                                                <div class="col-md-10">
+                                                    {{ form.email(class="form-control" , placeholder="Applicant Email", id="email_form") }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">City</label>
+                                                <div class="col-md-10">
+                                                    {{ form.city(class="form-control") }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Applicant Age</label>
+                                                <div class="col-md-10">
+                                                    {{ form.age(class="form-control") }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >Client</label>
+                                                <div class="col-md-10">
+                                                    {{ form.client(class="form-control", placeholder="Client Name", id="client_form") }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >Salary</label>
+                                                <div class="col-md-10">
+                                                    {{ form.salary(class="form-control", placeholder="salary") }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" for="date">Date</label>
+                                                <div class="col-md-10">
+                                                    <div class="input-group">
+                                                        {{ form.date(type="text" ,class="form-control datepicker", placeholder="mm/dd/yyyy", id="datepicker-autoclose") }}
+                                                        <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar"></i></span>
+                                                    </div><!-- input-group -->
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" for="date" >Time Picker</label>
+                                                <div class="col-md-10">
+                                                    <div class="input-group m-b-15">
+                                                        <div class="bootstrap-timepicker">
+                                                            {{ form.time(id="timepicker" ,type="text", class="form-control") }}
+                                                        </div>
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                    </div><!-- input-group -->
+                                                </div>
+                                            </div>
+                                        <!--/form -->
+
+                                    </div> <!-- panel-body -->
+                                </div> <!-- panel -->
+                            </div> <!-- col -->
+                            {# {{ form.submit(class="btn btn-primary next-step center-block", style="width: 20%") }} #}
+                            <button type="button" class="btn btn-primary next-step center-block" id="confirm_button" style="width: 20%">next</button>
+                            <!-- <button type="button" class="btn btn-primary next-step center-block", style="width: 20%")>previous</button> -->
+                            <!-- <ul class="list-inline">
+                                <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
+                                <li><button type="button" class="btn btn-primary next-step">Save and continue</button></li>
+                            </ul> -->
+                        </div>
+
+                        {#__________________________________[ STEP3 ] #}
+                        <div class="tab-pane" role="tabpanel" id="complete">
+                            <div class="alert alert-info alert-dismissible fade in" style="margin-right:20%;margin-left:20%;">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 style="text-align:center">You have scheduled an interview !</h4>
+                                <div style="text-align:center;">
+                                <div  id="confirm_form">
+                                    <dl></dl>
+                                </div>
+                                {{ form.submit(class="btn btn-default block-center pull-center", style="width: 20%;") }}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="clearfix"></div>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+   </div>
+</div>
+
+
+
+
+{% endblock %}

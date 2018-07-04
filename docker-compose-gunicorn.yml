@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  mongodb:
+    image: aashreys/mongo-auth:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./app/mongodb-data:/data/db
+    environment:
+      - AUTH=yes
+      - MONGODB_ADMIN_USER=admin
+      - MONGODB_ADMIN_PASS=admin
+      - MONGODB_APPLICATION_DATABASE=itdojo
+      - MONGODB_APPLICATION_USER=itdojo
+      - MONGODB_APPLICATION_PASS=itdojo
+
+  nginx:
+    image: nginx:1.13.10-alpine
+    ports:
+      - "5000:80"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - itdojo
+
+  itdojo:
+    build: .
+    depends_on:
+      - mongodb
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - .:/usr/src/app
+    working_dir: "/usr/src/app"
+    command: gunicorn -w 2 -b :8000 app:app
+    restart: on-failure:5
+    env_file:
+      - .env
+    environment:
+      - LANG=C.UTF-8
+      - APP_ENVIRONMENT=production
+      - APP_ADMIN=admin@it-dojo.io
+      - APP_FROM=no-reply@it-dojo.io
+      - MAILGUN_DOMAIN=mail.it-dojo.io
+      - MAILGUN_API=${MAILGUN_API}

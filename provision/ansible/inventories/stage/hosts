@@ -1,0 +1,13 @@
+[inventory:children]
+load-balancer
+docker
+app
+
+[load-balancer:children]
+app
+
+[docker:children]
+app
+
+[app]
+206.189.174.108

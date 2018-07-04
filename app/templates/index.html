@@ -1,0 +1,140 @@
+<html>
+  <head>
+    {% include "meta.html" %}
+    <title>IT/DOJO</title>
+    <style>
+      body {
+        background-image: url("/static/images/background_index.png") ;
+        background-size: cover;
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body style="zoom: 90%;" >
+
+    <!-- _________________________________________[ LOGIN ] -->
+    <div class="container navbar bg-default">
+      <div class="row navbar navbar-fixed-top" style="width: 1400px; margin: 0 auto;padding:1%;" >
+        <nav class="nav navbar-nav navbar-right fixed-top ">
+
+          <form class="form-inline my-2 my-lg-0" action="/login" method="POST">
+            {{ login_form.csrf_token }}
+            <div class="form-group">
+              {{ login_form.email(class="form-control", style="height:100%;margin:-3%;")}}
+            </div>
+
+            <div class="form-group">
+              {{ login_form.password(class="form-control", style="height:100%;margin:-2%;")}}
+            </div>
+
+            <div class="form-group">
+              {{ login_form.submit(class="btn btn-primary")}}
+            </div>
+
+            <div class="">
+            <a class="" style="padding-left: 48%;color:white;" href="{{url_for('user_recover')}}">Forgot your password?</a></li>
+            </div>
+
+            {% if login_form.errors %}
+            <ul class="errors">
+              {% for field_name, field_errors in login_form.errors|dictsort if field_errors %}
+                {% for error in field_errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </form>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!--________________________________________[ CONTENT  ] -->
+  <div class="container-fluid" style="width: 1100px; margin: 0 auto">
+    <div class="row" >
+    </div>
+
+    <div class="row-fixed">
+      <div class="col-md-8" style="padding:6%;right:20%;">
+        <div class="container">
+          <div class="row">
+            <img src="/static/images/lpw.png" alt="">
+          </div>
+          <div class="row">
+            <p class="lead"  style="margin-top: 8%;color:white;text-shadow: 4px 3px 5px black" >The place where you can build <br> trusful and authentic partners </p>
+            <button class="btn" style="background-color:#d24f03;"  ><a href="/about" style="color:white;"> LEARN MORE </a></button>
+          </div>
+        </div>
+      </div>
+
+      <!--____________________________________[ REGISTER ] -->
+      <div class="col-md-4" style="left: 6%;" >
+        <div class="row" style="padding: 0% 30%;">
+          <div class="wrapper-page"><img href="" src="/static/images/LOGO.png" class="img-responsive center-block" ></img></div>
+        </div>
+        <div class="row">
+          <!-- Begin page -->
+          <div class="wrapper-page">
+            <div class="panel panel-color panel-primary panel-pages">
+              <div class="panel-body">
+                <h4 class="text-muted text-center m-t-0"><b>Sign Up</b></h4>
+
+                <form class="form-horizontal m-t-20" method="POST" action="/user/register">
+                  {{ registration_form.csrf_token }}
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      {{ registration_form.email(class="form-control")}}
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      {{ registration_form.password(class="form-control")}}
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      {{ registration_form.confirm(class="form-control")}}
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-end">
+                    {{ registration_form.profile(class="radio radio-info radio-inline")}}
+                  </div>
+
+                  <br>
+
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <div class="checkbox checkbox-primary">
+                        {{ registration_form.accept_tos() }}
+                        <label for="checkbox-signup">
+                          I accept <a href="#">Terms and Conditions</a>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group text-center m-t-40">
+                    <div class="col-xs-12">
+                      {{ registration_form.submit(class="btn btn-primary btn-block btn-lg ") }}
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div> <!--   signup-->
+        </div> <!-- endrow -->
+      </div>
+
+    </div>
+  </div>
+
+  {% include "js.html" %}
+  {% include "notification.html" %}
+  </body>
+</html>

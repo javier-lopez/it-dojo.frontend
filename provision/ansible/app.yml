@@ -1,0 +1,24 @@
+- import_playbook: plays/common.yml
+  when:
+    - play_common is defined
+    - play_common == true
+
+- import_playbook: plays/load-balancer.yml
+  when:
+    - play_load_balancer is defined
+    - play_load_balancer == true
+
+- import_playbook: plays/docker.yml
+  when:
+    - play_docker is defined
+    - play_docker == true
+
+- import_playbook: plays/dockerized/app.yml
+  when:
+    - play_dockerized_api is defined
+    - play_dockerized_api == true
+
+- import_playbook: plays/post-deployment.yml
+  when:
+    - play_post_deployment is defined
+    - play_post_deployment == true

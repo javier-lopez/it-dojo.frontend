@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<!--____________________________________[ REAL CONT ]-->
+<div class="container">
+  <div class="row row-eq-height">
+
+    <!--_____________________________[ COL2 ]  -->
+    <div class="col-md-7" style="width:100%;">
+      <div class="panel-body">
+          <h3>¡Bienvenido!</h3>
+          <p>No ha confirmado su cuenta, por favor revise su correo (incluyendo su folder de spam) y haga click en el link de confirmación. ¿No ha recibido el correo?, <a href="{{url_for('user_resend')}}">Reenviar</a>.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

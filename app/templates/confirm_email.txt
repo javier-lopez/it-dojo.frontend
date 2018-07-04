@@ -1,0 +1,9 @@
+Estimado {{user.email}},
+
+Gracias por crear una cuenta en https://it-dojo.io, por favor haga click en el siguiente vínculo para activarla:
+
+{{token_url}}
+
+Sinceramente,
+
+El equipo de IT/DOJO

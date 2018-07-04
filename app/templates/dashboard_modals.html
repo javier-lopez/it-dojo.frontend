@@ -1,0 +1,34 @@
+<!-- sample modal content -->
+<div id="delete-entry-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none">
+
+    <div class="modal-dialog" style="width:55%">
+
+      <div class="modal-content" style="background-color: #323c48;padding-right:2%;padding-left:2%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title" id="custom-width-modalLabel" style="color:white;">Entry Deletion</h4>
+            </div>
+            <div class="modal-body" style="padding-right:5%;padding-left:5%;">
+               <h4 style="color:white;">
+									You Are about to delete an scheduled interview, you will need to re-schedule a new one,<br>
+									<h3 style="color:white;">Are you sure ?</h3>
+               </h4>
+           </div>
+
+					 <form method="POST" role="form" >
+						 <div class="modal-footer">
+
+									<button type='submit' id="close"  name='close'  value='close'  data-infarto='delete' class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+									<button type='submit' id="delete" name='delete' value='delete' data-infarto='delete' class="btn btn-primary waves-effect">Delete</button>
+						 </div>
+					 </form>
+
+      </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+

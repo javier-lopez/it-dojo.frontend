@@ -1,0 +1,56 @@
+<!-- sample modal content -->
+<div id="edit_profile_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none">
+    <div class="modal-dialog" style="width:55%">
+      <div class="modal-content" style="background-color: #323c48;padding-right:2%;padding-left:2%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h4 class="modal-title" id="custom-width-modalLabel" style="color:white;">Edit Profile</h4>
+            </div>
+
+
+            {% if reset_password_form.errors %}
+            <ul class="errors">
+              {% for field_name, field_errors in reset_password_form.errors|dictsort if field_errors %}
+                {% for error in field_errors %}
+                  <li style="color: red;">{{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+
+            <div class="modal-body" style="padding-right:5%;padding-left:5%;">
+
+            {#__________________[ FORM ] #}
+              <form action="/user/reset" methods='POST' >
+
+                <h4 style="color:white;" >Name</h4>
+                   <input type="email" placeholder="email" class="form-control"/>
+                   <br>
+                   <input type="email" placeholder="confirm email" class="form-control"/>
+                <hr>
+                <h4 style="color:white;" >Password</h4>
+                   <!-- <input type="password" placeholder="password" name="" id="" class="form-control"/> -->
+                  {{ reset_password_form.password( type="password",placeholder="password",class="form-control" ) }}
+                   <br>
+                   <!-- <input type="password" placeholder="confirm password" name="" id="" class="form-control"/> -->
+                   {{ reset_password_form.confirm( type="password",placeholder="confirm password",class="form-control" ) }}
+                <hr>
+
+                <h4 style="color:white;" >Upload Image</h4>
+                <button type="button" class="fileupload btn btn-primary waves-effect">
+                  <span>Choose Image</span>
+                    <input type="file" class="upload">
+                  </button>
+
+           </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                {{ reset_password_form.submit( class="btn btn-primary" ) }}
+            </div>
+
+            </form>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

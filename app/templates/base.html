@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% include "meta.html" %}
+        {% block meta_refresh %}{% endblock %}
+        {% if title %}
+        <title>{{ title }} - IT/DOJO</title>
+        {% else %}
+        <title>IT/DOJO</title>
+        {% endif %}
+    </head>
+
+    <body class="fixed-left" style="zoom: 90%;height:100%;" {% if onloadmessage %} onload="alert('{{onloadmessage}}');" {% endif %}>
+       {% include "navbar.html" %}
+       <div class="content-page">
+             <div class="content">
+                <div class="">
+                    <div class="page-header-title">
+                         <h4 class="page-title"></h4>
+                    </div>
+                </div>
+                <div class="page-content-wrapper ">
+                     <div class="container">
+                       <!-- [START BLOCK] -->
+                       {% block content %}{% endblock%}
+                    </div><!-- container -->
+                </div> <!-- Page content Wrapper -->
+            </div> <!-- content -->
+       </div>
+
+       {% include "footer.html" %}
+
+       <script type="text/javascript">
+           window.appData = {
+               {% if pie_chart_data %}
+               donutData: {{ pie_chart_data|safe }},
+               {% else %}
+               donutData: [
+                {label: "NoData",   value: 1},
+               ],
+               {% endif %}
+               donutColors: [
+                '#dcdcdc', '#01a4fe', '#04a2b3',
+               ],
+           }
+       </script>
+
+       {% include "js.html" %}
+       {% include "notification.html" %}
+    </body>
+</html>
