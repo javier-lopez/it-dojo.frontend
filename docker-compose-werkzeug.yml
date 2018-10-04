@@ -3,22 +3,21 @@ version: '3.4'
 services:
   mongodb:
     image: aashreys/mongo-auth:latest
-    ports:
-      - "27017:27017"
+    #ports:
+      #- "27017:27017"
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./app/mongodb-data:/data/db
+      - ./mongodb-data:/data/db
     environment:
       - AUTH=yes
       - MONGODB_ADMIN_USER=admin
       - MONGODB_ADMIN_PASS=admin
-      - MONGODB_APPLICATION_DATABASE=itdojo
-      - MONGODB_APPLICATION_USER=itdojo
-      - MONGODB_APPLICATION_PASS=itdojo
-        #- TZ='America/Mexico_City'
+      - MONGODB_APPLICATION_DATABASE=app
+      - MONGODB_APPLICATION_USER=app
+      - MONGODB_APPLICATION_PASS=app
 
-  itdojo:
+frontend:
     build: .
     ports:
       - "5000:5000"
@@ -33,11 +32,10 @@ services:
     env_file:
       - .env
     environment:
-      #- TZ='America/Mexico_City'
       - LANG=C.UTF-8
       - FLASK_APP=run.py
       - APP_ENVIRONMENT=development
       - APP_ADMIN=admin@it-dojo.io
       - APP_FROM=no-reply@it-dojo.io
-      - MAILGUN_DOMAIN=mail.it-dojo.io
+      - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
       - MAILGUN_API=${MAILGUN_API}

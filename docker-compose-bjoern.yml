@@ -3,28 +3,28 @@ version: '3.4'
 services:
   mongodb:
     image: aashreys/mongo-auth:latest
-    ports:
-      - "27017:27017"
+    #ports:
+      #- "27017:27017"
     volumes:
-      - ./app/mongodb-data:/data/db
+      - ./mongodb-data:/data/db
     environment:
       - AUTH=yes
       - MONGODB_ADMIN_USER=admin
       - MONGODB_ADMIN_PASS=admin
-      - MONGODB_APPLICATION_DATABASE=itdojo
-      - MONGODB_APPLICATION_USER=itdojo
-      - MONGODB_APPLICATION_PASS=itdojo
+      - MONGODB_APPLICATION_DATABASE=app
+      - MONGODB_APPLICATION_USER=app
+      - MONGODB_APPLICATION_PASS=app
 
   nginx:
     image: nginx:1.13.10-alpine
     ports:
-      - "5000:80"
+      - "80:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
-      - itdojo
+      - frontend
 
-  itdojo:
+  frontend:
     build: .
     depends_on:
       - mongodb
@@ -40,5 +40,5 @@ services:
       - APP_ENVIRONMENT=production
       - APP_ADMIN=admin@it-dojo.io
       - APP_FROM=no-reply@it-dojo.io
-      - MAILGUN_DOMAIN=mail.it-dojo.io
+      - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
       - MAILGUN_API=${MAILGUN_API}
