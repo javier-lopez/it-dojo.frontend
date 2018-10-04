@@ -7,7 +7,8 @@ Usage
 -----
 
     #development
-    $ echo 'MAILGUN_API=key-api' > .env
+    $ echo 'MAILGUN_DOMAIN=domain.tld' > .env
+    $ echo 'MAILGUN_API=key-api'      >> .env
     $ ./setup.sh [docker-compose-file]
 
     #production
