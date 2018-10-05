@@ -5,10 +5,10 @@ from app.decorators import threaded
 
 import requests
 
-APP_FROM    = app.config['APP_FROM']
-APP_ADMIN   = app.config['APP_ADMIN']
-MAILGUN_API = app.config['MAILGUN_DOMAIN']
-MAILGUN_API = app.config['MAILGUN_API']
+APP_FROM       = app.config['APP_FROM']
+APP_ADMIN      = app.config['APP_ADMIN']
+MAILGUN_DOMAIN = app.config['MAILGUN_DOMAIN']
+MAILGUN_API    = app.config['MAILGUN_API']
 
 @threaded
 def send_async_email(app, subject, recipients, text_body, html_body):
