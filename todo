@@ -1,0 +1,12 @@
+agregar soporte de notificaciones
+agregar profile endpoint
+agregar o eliminar settings
+eliminar lock screen
+
+completar scores endpoint
+    - asignar una puntuación /requiere modificacion del backend
+    - grabar la sesión
+
+invoice
+    - agregar o mejorar
+    - establecer modelo de negocios, el actual es muy limitado
