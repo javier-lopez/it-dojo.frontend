@@ -1,11 +1,10 @@
 from app            import app
-from app.decorators import async
+from app.decorators import threaded
 from app.models     import ScheduleInterview, Interview
 
 import requests
 
-
-@async
+@threaded
 def async_test_container(app, interview_data, id_, test_file="/test"):
     """
     interview_data need to be a list
@@ -42,8 +41,7 @@ def async_test_container(app, interview_data, id_, test_file="/test"):
 
         return result
 
-
-@async
+@threaded
 def async_destroy_container(app, interview_data, id_):
     """
     interview_data need to be a list
@@ -66,7 +64,6 @@ def async_destroy_container(app, interview_data, id_):
                         auth=('admin', 'admin'),
                     )
 
-
                 app.logger.debug("destroyed")
 
                 data.uri      = []
@@ -75,12 +72,8 @@ def async_destroy_container(app, interview_data, id_):
 
                 break
 
-
-@async
+@threaded
 def async_add_score(app, id):
-    """
-    interview_data need to be a list
-    """
     with app.app_context():
         #if not type(interview_data) == list:
         #   interview_data = [interview_data]
@@ -96,26 +89,15 @@ def async_add_score(app, id):
                 data_schedule_interview.score = total
                 data_schedule_interview.save()
 
-
-
-
 def score_interview_container(interview_data, id):
-    """ 'test_file=' optional in case need it"""
     """ interview_data need to be a list     """
     return async_test_container(app, interview_data, id)
 
-
 def destroy_interview_containers(interview_data, id):
-   """ 'test_file=' optional in case need it"""
    """ interview_data need to be a list     """
-
    return async_destroy_container(app, interview_data, id)
-
 
 def add_schedule_interview_score(id):
    """ 'test_file=' optional in case need it"""
    """ interview_data need to be a list     """
-
    return async_add_score(app,id)
-
-

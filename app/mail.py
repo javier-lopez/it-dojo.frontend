@@ -1,16 +1,16 @@
 from app       import app
 from flask     import render_template, url_for
 from app.token import generate_confirmation_token
-from app.decorators import async
+from app.decorators import threaded
 
 import requests
 
 APP_FROM    = app.config['APP_FROM']
 APP_ADMIN   = app.config['APP_ADMIN']
+MAILGUN_API = app.config['MAILGUN_DOMAIN']
 MAILGUN_API = app.config['MAILGUN_API']
 
-
-@async
+@threaded
 def send_async_email(app, subject, recipients, text_body, html_body):
     with app.app_context():
         uri     = 'https://api.mailgun.net/v3/{0}/messages'.format(MAILGUN_DOMAIN)
@@ -81,4 +81,3 @@ def send_test_completion(users):
                    render_template("test_completion.txt",test=test, access_url=access_url ),
                    render_template("test_completion.html", test=test, access_url=access_url)
         )
-

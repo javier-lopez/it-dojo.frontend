@@ -4,7 +4,7 @@ from threading import Thread
 from flask import flash, redirect, url_for
 from flask_login import current_user
 
-def async(f):
+def threaded(f):
     def wrapper(*args, **kwargs):
         thr = Thread(target=f, args=args, kwargs=kwargs)
         thr.start()
