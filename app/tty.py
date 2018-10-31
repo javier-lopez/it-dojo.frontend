@@ -24,7 +24,7 @@ def async_test_container(app, interview_data, id_, test_file="/test"):
                 endpoint + test_file,
                 verify=False,
                 headers={"Content-Type" : "application/json"},
-                auth=('admin', 'admin'),
+                auth=('key', app.config['API_KEY']),
                 ) ]
 
             result[endpoint].append(data["template"][counter])

@@ -509,9 +509,9 @@ def test_confirm(token):
             app.logger.debug("field: {}".format(field))
 
             tasks = requests.get(
-                'https://api.it-dojo.io/v0.1/tty/env/' + field,
+                'https://api.' + app.config['APP_DOMAIN'] + '/v0.1/tty/env/' + field,
                 verify=False,
-                auth=('admin', 'admin')
+                auth=('key', app.config['API_KEY']),
             )
 
             app.logger.debug("tasks: {}".format(tasks.json()))
@@ -523,9 +523,9 @@ def test_confirm(token):
             for env in tasks.json()["env"]:
 
                 res = requests.post(
-                          'https://api.it-dojo.io/v0.1/tty',
+                          'https://api.' + app.config['APP_DOMAIN'] + '/v0.1/tty',
                           verify=False,
-                          auth=('admin', 'admin'),
+                          auth=('key', app.config['API_KEY']),
                           json={"username": schedule_interview.email, "template": field + "/" + env }
                       )
 
@@ -599,12 +599,12 @@ def test_confirm(token):
 @user_confirmed_required
 def test_travis_like():
     request = requests.post(
-              'https://api.it-dojo.io/v0.2/tty',
+              'https://api.' + app.config['APP_DOMAIN'] + '/v0.2/tty',
               verify=False,
-              auth=('admin', 'admin'), #to be replaced by api keys
+              auth=('key', app.config['API_KEY']),
               json={
-                  "username" : "foobar@it-dojo.io",
-                  "repo"     : "https://javier-lopez:passwd@github.com/it-dojo/user.sample.test.git",
+                  "username" : "foobar@" + app.config['APP_DOMAIN'],
+                  "repo"     : "https://user:passwd@github.com/it-dojo/user.sample.test.git",
                   "action"   : "init",
               },
           )

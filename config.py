@@ -3,8 +3,12 @@ import urllib.parse
 
 class Config(object):
     #general settings
-    APP_ADMIN = os.environ.get('APP_ADMIN') or 'admin@it-dojo.com'
-    APP_FROM  = os.environ.get('APP_FROM')  or 'no-reply@it-dojo.io'
+    APP_DOMAIN = os.environ.get('APP_DOMAIN') or 'it-dojo.io'
+    APP_ADMIN  = os.environ.get('APP_ADMIN')  or 'admin@'    + APP_DOMAIN
+    APP_FROM   = os.environ.get('APP_FROM')   or 'no-reply@' + APP_DOMAIN
+
+    #backend
+    API_KEY    = os.environ.get('API_KEY')    or 'default'
 
     #flask-wtf
     SECRET_KEY  = os.environ.get('SECRET_KEY') or 'you-will-never-guess'

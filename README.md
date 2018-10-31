@@ -7,8 +7,10 @@ Usage
 -----
 
     #development
-    $ echo 'MAILGUN_DOMAIN=domain.tld' > .env
-    $ echo 'MAILGUN_API=key-api'      >> .env
+    $ echo 'APP_DOMAIN=it-dojo.io'      > .env
+    $ echo 'API_KEY=default'           >> .env
+    $ echo 'MAILGUN_DOMAIN=domain.tld' >> .env
+    $ echo 'MAILGUN_API=key-api'       >> .env
     $ ./setup.sh [docker-compose-file]
 
     #production
@@ -21,4 +23,3 @@ Dependencies
 
 - [docker](https://www.docker.com/)
 - [docker-compose](https://docs.docker.com/compose/)
-- [terraform](https://www.terraform.io/)

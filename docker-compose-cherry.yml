@@ -6,9 +6,8 @@ services:
     #ports:
       #- "27017:27017"
     volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
       - ./mongodb-data:/data/db
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - AUTH=yes
       - MONGODB_ADMIN_USER=admin
@@ -22,17 +21,17 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/default/:/etc/nginx/conf.d
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
-      - frontend
+      - app
 
-  frontend:
+  app:
     build: .
     depends_on:
       - mongodb
     volumes:
       - .:/usr/src/app
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     working_dir: "/usr/src/app"
     command: python run.cherry.py
@@ -42,7 +41,9 @@ services:
     environment:
       - LANG=C.UTF-8
       - APP_ENVIRONMENT=production
-      - APP_ADMIN=admin@it-dojo.io
-      - APP_FROM=no-reply@it-dojo.io
+      - APP_DOMAIN=${APP_DOMAIN}
+      - APP_ADMIN=admin@${APP_DOMAIN}
+      - APP_FROM=no-reply@${APP_DOMAIN}
+      - API_KEY=${API_KEY}
       - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
       - MAILGUN_API=${MAILGUN_API}

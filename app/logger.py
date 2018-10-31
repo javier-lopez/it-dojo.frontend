@@ -8,7 +8,7 @@ class MailgunLogger(logging.Handler):
         logging.Handler.__init__(self)
         self.uri        = 'https://api.mailgun.net/v3/{0}/messages'.format(Config.MAILGUN_DOMAIN)
         self.api        = Config.MAILGUN_API
-        self.subject    = "it-dojo.io critical error"
+        self.subject    = Config.APP_DOMAIN + " critical error"
         self.sender     = Config.APP_FROM
         self.recipient  = Config.APP_ADMIN
 
