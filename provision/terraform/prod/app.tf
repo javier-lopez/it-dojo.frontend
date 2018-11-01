@@ -20,7 +20,23 @@ resource "digitalocean_droplet" "app" {
     }
 
     provisioner "remote-exec" {
-        script = "provision/02-install-ansible-deps.sh"
+        script = "provision/01-add-admin-user.sh"
+    }
+
+    provisioner "remote-exec" {
+        script = "provision/01-install-ansible-deps.sh"
+    }
+
+    provisioner "remote-exec" {
+        script = "provision/02-install-minos-core.sh"
+    }
+
+    provisioner "remote-exec" {
+        script = "provision/01-install-docker.sh"
+    }
+
+    provisioner "remote-exec" {
+        script = "provision/01-install-docker-compose.sh"
     }
 }
 

@@ -1,0 +1,1 @@
+/home/javier/code/minos/terraforms/scripts/01-disable-unattended-upgrades.sh

@@ -1,0 +1,1 @@
+/home/javier/code/minos/terraforms/scripts/02-install-minos-core.sh
