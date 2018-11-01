@@ -53,7 +53,7 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.objects(email=form.email.data).first()
         if user is None:
-            flash('El usuario con el correo "{}" no existe'.format(form.email.data))
+            flash('Login failed, "{}" doesn\'t exists'.format(form.email.data))
             return render_template("index.html", login_form=form, registration_form=RegisterForm())
         else:
             if user.check_password(form.password.data):
@@ -62,7 +62,7 @@ def login():
                 user.save()
                 return redirect(url_for('dashboard'))
             else:
-                flash('El usuario o contraseña es incorrecto')
+                flash('Login failed, user/password mismatch')
                 return redirect(url_for('index'))
 
     return render_template("index.html", login_form=form, registration_form=RegisterForm())
@@ -89,11 +89,11 @@ def user_register():
                         profile=form.profile.data
                         ).save()
             send_confirmation_email(new_user)
-            flash('Se ha enviado un mensaje de confirmación a {0}, por favor verifique su cuenta para continuar'.format(form.email.data))
+            flash('Confirmation email sent to "{0}"'.format(form.email.data))
             login_user(new_user)
             return redirect(url_for('user_unconfirmed'))
         else:
-            flash('El usuario con el correo {} ya existe'.format(form.email.data))
+            flash('"{}" email has already been registered'.format(form.email.data))
             #print("[+] _______________________[ user not added ]")
             return render_template('index.html', registration_form=form, login_form=login_form)
     return redirect(url_for('index'))
@@ -103,7 +103,7 @@ def user_register():
 @app.route('/user/unconfirmed')
 def user_unconfirmed():
     if current_user.confirmed:
-        flash('La cuenta adjunta ({0}) ya ha sido confirmada, puede iniciar sesión'.format(current_user.email))
+        flash('"{0}" has already been confirmed, you can now login'.format(current_user.email))
         return redirect('index')
     return render_template('user_unconfirmed.html')
 
@@ -112,17 +112,17 @@ def user_unconfirmed():
 def user_confirm(token):
     email = confirm_token(token)
     if not email:
-        flash('El código de confirmación es inválido o ha expirado')
+        flash('Confirmation code is invalid or has expired')
         return redirect(url_for('index'))
 
     user = User.objects(email=email).first()
     if user.confirmed:
-        flash('La cuenta adjunta ({0}) ya ha sido confirmada, puede iniciar sesión'.format(email))
+        flash('"{0}" has already been confirmed, you can login now'.format(email))
     else:
         user.confirmed    = True
         user.confirmed_on = datetime.now()
         user.save()
-        flash('Ha confirmado exitosamente su cuenta ({0}), ahora tiene acceso a toda la funcionalidad de IT/DOJO'.format(email))
+        flash('"{0}" confirmed!, you have full access to IT/DOJO'.format(email))
     return redirect(url_for('dashboard'))
 
 #____________________________________________________[ RESEND ]
@@ -130,7 +130,7 @@ def user_confirm(token):
 @login_required
 def user_resend():
     send_confirmation_email(current_user)
-    flash('Se ha enviado un nuevo mensaje de confirmación a {0}, por favor verifique su cuenta para continuar'.format(current_user.email))
+    flash('Confirmation email sent to "{0}"'.format(current_user.email))
     return redirect(url_for('user_unconfirmed'))
 
 #____________________________________________________[ RECOVER ]
@@ -142,20 +142,18 @@ def user_recover():
     if request.method == 'POST' and form.validate():
         user = User.objects(email=form.email.data).first()
         if user is None:
-            flash('Se ha enviado un código de recuperación a {0}, por favor verifique su cuenta para continuar'
-                  .format(form.email.data))
+            flash('Recovery code sent to "{0}"'.format(form.email.data))
             return redirect(url_for('index'))
         else:
             if user.is_confirmed:
                 send_reset_passwd_email(user)
-                flash('Se ha enviado un código de recuperación a {0}, por favor verifique su cuenta para continuar'
-                      .format(form.email.data))
+                flash('Recovery code sent to "{0}"'.format(form.email.data))
                 return redirect(url_for('index'))
             else:
-                flash('El usuario con la cuenta {0} no ha válidado su dirección, inicie sesión y solicite su código de verificación'
+                flash('"{0}" hasn\'t confirmed its account, please login and verify the account'
                       .format(form.email.data))
                 return redirect(url_for('index'))
-    return render_template('user_recover.html', title='Recuperar cuenta', recover_form=form)
+    return render_template('user_recover.html', title='Account Recovery', recover_form=form)
 
 #____________________________________________________[ RESET TOKEN ]
 @app.route('/user/reset/<token>')
@@ -163,7 +161,7 @@ def user_reset(token):
     # app.logger.debug('token: {}'.format(token))
     email = confirm_token(token)
     if not email:
-        flash('El código de recuperación es inválido o ha expirado')
+        flash('Confirmation code is invalid or has expired')
         return redirect(url_for('user_recover'))
 
     user = User.objects(email=email).first()
@@ -179,9 +177,9 @@ def user_reset_password():
     if request.method == 'POST' and form.validate():
         user = User.objects(id=current_user.id).first()
         user.reset_password(form.password.data).save()
-        flash('Ha restaurado correctamente su cuenta')
+        flash('Account successfully restored!')
         return redirect(url_for('dashboard'))
-    return render_template('user_reset_password.html', title='Restaurar contraseña', reset_password_form=form)
+    return render_template('user_reset_password.html', title='Forgot Password', reset_password_form=form)
 
 #____________________________________________________[ USER EDIT ]
 @app.route('/user/edit', methods=['GET', 'POST'])
@@ -195,11 +193,11 @@ def user_edit():
         form_email     = User.objects(email=form.email.data).first()
 
         # if form_username != None and user.id != form_username.id:
-            # flash('Ya existe un usuario con el mismo nombre, seleccione otro')
+            # flash('"{}" has already been registered'.format(form_username))
             # return redirect(url_for('user_edit'))
 
         if form_email != None and user.id != form_email.id:
-            flash('Ya existe un usuario con el mismo correo, seleccione otro')
+            flash('"{}" has already been registered'.format(form_email))
             return redirect(url_for('user_edit'))
 
         # user.username = form.username.data
@@ -209,7 +207,7 @@ def user_edit():
             user.reset_password(form.password.data)
 
         user.save()
-        flash('Los cambios han sido guardados.')
+        flash('Your changes have been saved!')
         return redirect(url_for('user', username=current_user.username))
     else:
         user                 = User.objects(email=current_user.email).first()
@@ -238,7 +236,7 @@ def user(username):
     user = User.objects(username=username).first()
 
     if user == None:
-        flash('User %s not found.' % username)
+        flash('User "{}" not found.'.format(username))
         return redirect(url_for('index'))
     return render_template('user.html', user=user)
 
@@ -255,7 +253,7 @@ def dashboard():
     if request.method == 'POST' and reset_form.validate():
         user = User.objects(id=current_user.id).first()
         user.reset_password(form.password.data).save()
-        flash('Ha restaurado correctamente su cuenta')
+        flash('Account successfully restored')
         return redirect(url_for('dashboard'))
 
     if request.method == 'POST': # and request.form.get('delete') == 'delete':
@@ -335,7 +333,7 @@ def dashboard():
 @login_required
 @user_confirmed_required
 def scores():
-    title="scores"
+    title="Scores"
 
     projects     = ScheduleInterview.objects(username=current_user.email).distinct("client")
     projects     = sorted( list( set( [i.lower().capitalize() for i in projects] ) ) )
@@ -395,7 +393,7 @@ def test_confirm(token):
     id    = confirm_token(token)
 
     if not id:
-        flash('El código de confirmación es inválido o ha expirado')
+        flash('Confirmation code is invalid or has expired')
         return redirect(url_for('index'))
 
     schedule_interview = ScheduleInterview.objects(id=id).first()
@@ -493,7 +491,7 @@ def test_confirm(token):
             #return render_template("interview.html", title=title, uri=cache.uri[0], readme=cache.readme[0])
 
         if schedule_interview and schedule_interview.confirmed:
-            flash('La cuenta {0} se encuentra realizando el examen asignado'.format(schedule_interview.email))
+            flash('"{0}" is currently doing the assigned exam'.format(schedule_interview.email))
         else:
             #updating db
             schedule_interview.confirmed    = True
@@ -501,7 +499,7 @@ def test_confirm(token):
             schedule_interview.status       = "pending" #move to "in-progress"
             schedule_interview.save()
 
-            flash('el usuario {0} se encuentra realizando la prueba'.format(schedule_interview.email))
+            flash('"{0}" is currently doing the assigned exam'.format(schedule_interview.email))
         #return redirect(url_for('interview'))
 
             field = schedule_interview.field
@@ -623,7 +621,7 @@ def test_travis_like():
             response = requests.get('http://' + data['tty']['uri'])
 
     return render_template("test-travis-like.html",
-                           title="test travis like",
+                           title="Test Travis Like Interface",
                            uri=data['tty']['uri'],
                            instructions=data['tty']['readme'])
 
@@ -634,7 +632,7 @@ def test_travis_like():
 @user_confirmed_required
 @app.route("/invoice", methods=['GET'])
 def invoice():
-    title = "invoice"
+    title = "Invoice"
     return render_template("invoice.html", title=title)
 
 
