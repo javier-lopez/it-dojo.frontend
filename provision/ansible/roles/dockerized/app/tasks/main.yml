@@ -7,30 +7,39 @@
     - files/*
     - files/.env
 
+- name: verify if rsync is installed
+  stat: path=/usr/bin/rsync
+  register: rsync_installed
+
+- name: install rsync
+  include_tasks: install-rsync.{{distro}}.yml
+  when: not rsync_installed.stat.exists
+
 - name: upload directories
-  synchronize: src={{item}} dest="{{docker_containers_volume_path}}/app" delete=yes recursive=yes copy_links=yes
+  synchronize: src={{item}} dest="{{docker_containers_volume_path}}/app"  \
+               delete=yes recursive=yes copy_links=yes
   with_items:
     - app
     - nginx
+    - letsencrypt
 
 - name: create service docker volume directories
   file: path={{docker_containers_volume_path}}/app/ state=directory
   with_items:
     - app/mongodb-data
 
-- name: build app stack
-  shell: |
-    export TMPDIR=$HOME
-    echo $TMPDIR
-    cd {{docker_containers_volume_path}}/app && \
-    docker-compose rm -f && \
-    find .  -maxdepth 2 -iname "__pycache__" -exec rm -fr {} \; && \
-    docker images | grep -i none | awk '{print $3}' | xargs -I{} docker rmi -f {} 2>&- || \
-    docker-compose rm -f && \
-    find .  -maxdepth 2 -iname "__pycache__" -exec rm -fr {} \; && \
-    docker images | grep -i none | awk '{print $3}' | xargs -I{} docker rmi -f {} 2>&-
+- name: install TLS certificates
+  copy: content="{{item.src}}" dest="{{docker_containers_volume_path}}/app/letsencrypt/certs/{{item.dst}}"
+  with_items:
+    - { src: '{{vault_fullchain}}', dst: 'fullchain.pem' }
+    - { src: '{{vault_privkey}}',   dst: 'privkey.pem' }
 
-    docker-compose build
+- name: build app stack
+  #/tmp usually doesn't have enough space for docker-compose build step
+  shell: |
+    export TMPDIR=$HOME; echo "$TMPDIR"
+    cd {{docker_containers_volume_path}}/app && \
+    docker-compose -f {{app_compose}} build
   register: app_built
 
 - debug: var=app_built
@@ -38,7 +47,7 @@
 - name: deploy app stack
   shell: |
     cd {{docker_containers_volume_path}}/app && \
-    docker-compose up -d
+    docker-compose -f {{app_compose}} up -d
   register: app_exec
 
 - debug: var=app_exec

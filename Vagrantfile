@@ -10,7 +10,7 @@ hosts = [
     {
         :name   => "local.it-dojo.io",
         :box    => "it-dojo/docker",
-        :groups => ["load-balancer", "docker", "app"],
+        :groups => ["docker", "app"],
         :ram    => "512", :cpus  => "1",
         :ip     => "10.10.10.11",
     },

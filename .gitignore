@@ -9,3 +9,6 @@ __pycache__
 .env
 .terraform
 *.tfstate
+letsencrypt/accounts/acme*
+letsencrypt/certs/*.pem
+mitogen-*

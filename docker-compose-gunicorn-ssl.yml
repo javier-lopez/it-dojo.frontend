@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  mongodb:
+    image: aashreys/mongo-auth:latest
+    #ports:
+      #- "27017:27017"
+    volumes:
+      - ./mongodb-data:/data/db
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - AUTH=yes
+      - MONGODB_ADMIN_USER=admin
+      - MONGODB_ADMIN_PASS=admin
+      - MONGODB_APPLICATION_DATABASE=app
+      - MONGODB_APPLICATION_USER=app
+      - MONGODB_APPLICATION_PASS=app
+
+  nginx:
+    image: nginx:1.13.10-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default-ssl/:/etc/nginx/conf.d
+      - ./letsencrypt/certs/:/certs/
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - app
+
+  app:
+    build: .
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/usr/src/app
+      - /etc/localtime:/etc/localtime:ro
+    working_dir: "/usr/src/app"
+    command: gunicorn -w 2 -b :8000 app:app
+    restart: on-failure:5
+    env_file:
+      - .env
+    environment:
+      - lang=c.utf-8
+      - app_environment=production
+      - app_domain=${app_domain}
+      - app_admin=admin@${app_domain}
+      - app_from=no-reply@${app_domain}
+      - api_key=${api_key}
+      - mailgun_domain=${mailgun_domain}
+      - mailgun_api=${mailgun_api}

@@ -3,11 +3,6 @@
     - play_common is defined
     - play_common == true
 
-- import_playbook: plays/load-balancer.yml
-  when:
-    - play_load_balancer is defined
-    - play_load_balancer == true
-
 - import_playbook: plays/docker.yml
   when:
     - play_docker is defined
