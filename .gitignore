@@ -8,7 +8,7 @@ mongodb-data
 __pycache__
 .env
 .terraform
-*.tfstate
+*.tfstate*
 letsencrypt/accounts/acme*
 letsencrypt/certs/*.pem
 mitogen-*
