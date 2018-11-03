@@ -62,7 +62,7 @@ def send_reset_passwd_email(user):
 def send_test_notification(test):
     token = generate_confirmation_token(str(test.id))
     access_url = url_for('test_confirm', token=token, _external=True)
-    app.logger.debug('Interview url: {0}'.format(confirm_url))
+    app.logger.debug('Interview url: {0}'.format(access_url))
 
     send_email("Información de la prueba en https://it-dojo.io",
                test.email,
