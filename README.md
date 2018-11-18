@@ -3,6 +3,8 @@ About
 
 [it-dojo](https://it-dojo.io/) frontend, python + flask + mongodb
 
+[![IT/DOJO DEMO](https://img.youtube.com/vi/szwCKajOSLs/0.jpg)](https://www.youtube.com/watch?v=szwCKajOSLs)
+
 Usage
 -----
 
